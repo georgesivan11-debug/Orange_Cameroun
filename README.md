@@ -38,7 +38,7 @@ pip install -r requirements.txt
 
 2. Lancer l'application :
 ```bash
-streamlit run app.py
+streamlit run orange_cameroun.py
 ```
 
 3. L'application s'ouvre dans le navigateur à l'adresse `http://localhost:8501`
