@@ -262,14 +262,35 @@ with tab_import:
         help="Format attendu : un client par ligne, séparateur virgule.",
     )
 
-    if uploaded_file is None:
+    c_demo1, c_demo2 = st.columns([1, 3])
+    with c_demo1:
+        demo_clicked = st.button("🧪 Charger le fichier de démonstration", use_container_width=True)
+    with c_demo2:
+        st.markdown(
+            "<div style='padding-top:0.5rem; color:#666; font-size:0.85rem;'>"
+            "Charge directement <code>sample_clients_test.csv</code> (2 000 clients), "
+            "fourni avec l'application sur le serveur — sans avoir besoin de le télécharger vous-même."
+            "</div>",
+            unsafe_allow_html=True,
+        )
+
+    source_file = None
+    if demo_clicked:
+        if os.path.exists("sample_clients_test.csv"):
+            source_file = "sample_clients_test.csv"
+        else:
+            st.error("❌ Le fichier `sample_clients_test.csv` est introuvable sur le serveur (a-t-il bien été déposé dans le dépôt ?).")
+    elif uploaded_file is not None:
+        source_file = uploaded_file
+
+    if source_file is None:
         st.info(
-            "💡 **Astuce :** pour tester rapidement, utilisez le fichier "
-            "`sample_clients_test.csv` fourni avec l'application (2 000 clients extraits de la base historique)."
+            "💡 Chargez votre propre fichier ci-dessus, ou cliquez sur **« Charger le fichier de démonstration »** "
+            "pour tester immédiatement avec des données d'exemple."
         )
     else:
         try:
-            df_input = pd.read_csv(uploaded_file)
+            df_input = pd.read_csv(source_file)
             required = set(MODEL_DATA['features_all'])
             available = set(df_input.columns)
             missing = required - available
